@@ -4,7 +4,7 @@ stages {
     stage('Checkout Source Code') {
         steps {
             git branch: 'main',
-                url: '<https://github.com/TesterGuruji/jmetertest.git>'
+                url: 'https://github.com/TesterGuruji/jmetertest.git'
         }
     }
 
