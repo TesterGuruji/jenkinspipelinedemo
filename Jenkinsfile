@@ -34,15 +34,7 @@ stages {
 
     stage('Publish HTML Report') {
         steps {
-            publishHTML([
-               reportDir: 'dashboard',
-                reportFiles: 'index.html',
-                reportName: 'JMeter HTML Report',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: false,
-                includes: '**/*'
-            ])
+            perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: 'test1.csv'
         }
     }
 
