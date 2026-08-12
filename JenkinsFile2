@@ -1,0 +1,67 @@
+pipeline {
+agent any
+parameters {
+    string(
+        name: 'dashboard',
+        defaultValue: 'admin',
+        description: 'Enter dashboard'
+    )
+
+}
+stages {
+    stage('Checkout Source Code') {
+        steps {
+            git branch: 'main',
+                url: 'https://github.com/TesterGuruji/jmetertest.git'
+        }
+    }
+
+    stage('Verify Files') {
+        steps {
+            sh 'pwd'
+            sh 'ls -R'
+        }
+    }
+
+    stage('Run JMeter Test') {
+        steps {
+
+            sh """
+        /Users/vaibhavsrivastava/Downloads/apache-jmeter-5.6.3/bin/jmeter -n -t S01_AddBook_bookStoreapp-HTTPScriptRecorder.jmx -l test2.csv -e -o ${params.dashboard}
+        """
+
+        }
+    }
+
+    stage('Archive Results') {
+        steps {
+            archiveArtifacts artifacts: 'test2.csv'
+            archiveArtifacts artifacts: '${params.dashboard}/**'
+        }
+    }
+
+    stage('Publish HTML Report') {
+        steps {
+            perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: 'test2.csv'
+        }
+    }
+
+}
+
+post {
+
+    always {
+        echo "Pipeline Finished"
+    }
+
+    success {
+        echo "Performance Test Passed"
+    }
+
+    failure {
+        echo "Performance Test Failed"
+    }
+
+}
+
+}
