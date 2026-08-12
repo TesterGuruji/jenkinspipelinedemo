@@ -23,11 +23,21 @@ stages {
         }
     }
 
+stage('Approval') {
+
+    steps {
+
+        input message: 'Shall we run test?'
+
+    }
+
+}
+
     stage('Run JMeter Test') {
         steps {
 
             sh """
-        /Users/vaibhavsrivastava/Downloads/apache-jmeter-5.6.3/bin/jmeter -n -t S01_AddBook_bookStoreapp-HTTPScriptRecorder.jmx -l test2.csv -e -o ${params.dashboard}
+        /Users/vaibhavsrivastava/Downloads/apache-jmeter-5.6.3/bin/jmeter -n -t S01_AddBook_bookStoreapp-HTTPScriptRecorder.jmx -l testfile2.csv -e -o ${params.dashboard}
         """
 
         }
@@ -35,14 +45,14 @@ stages {
 
     stage('Archive Results') {
         steps {
-            archiveArtifacts artifacts: 'test2.csv'
+            archiveArtifacts artifacts: 'testfile2.csv'
             archiveArtifacts artifacts: '${params.dashboard}/**'
         }
     }
 
     stage('Publish HTML Report') {
         steps {
-            perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: 'test2.csv'
+            perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: 'testfile2.csv'
         }
     }
 
