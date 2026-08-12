@@ -19,7 +19,7 @@ stages {
         steps {
 
             sh """
-        /Users/vaibhavsrivastava/Downloads/apache-jmeter-5.6.3/bin/jmeter -n -t S01_AddBook_bookStoreapp-HTTPScriptRecorder.jmx -l test1.csv -e -o dashboard
+        /Users/vaibhavsrivastava/Downloads/apache-jmeter-5.6.3/bin/jmeter -n -t S01_AddBook_bookStoreapp-HTTPScriptRecorder.jmx -l test2.csv -e -o v02dashboard
         """
 
         }
@@ -27,14 +27,14 @@ stages {
 
     stage('Archive Results') {
         steps {
-            archiveArtifacts artifacts: 'test1.csv'
-            archiveArtifacts artifacts: 'dashboard/**'
+            archiveArtifacts artifacts: 'test2.csv'
+            archiveArtifacts artifacts: 'v02dashboard/**'
         }
     }
 
     stage('Publish HTML Report') {
         steps {
-            perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: 'test1.csv'
+            perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: 'test2.csv'
         }
     }
 
